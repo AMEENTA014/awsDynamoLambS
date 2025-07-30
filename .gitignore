@@ -1,0 +1,8 @@
+node_modules
+processor_lambda.zip
+query_lambda.zip
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+.env
+.terraform

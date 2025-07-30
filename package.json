@@ -1,0 +1,25 @@
+{
+  "name": "serverless-analytics-dashboard",
+  "version": "1.0.0",
+  "description": "Serverless app for processing user-generated content with real-time analytics",
+  "main": "processor_lambda.js",
+  "scripts": {
+    "test": "node ./tests/runAllTest.js",
+    "deploy": "terraform apply --auto-approve",
+    "destroy": "terraform destroy --auto-approve",
+    "init": "terraform init"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.454.0",
+    "@aws-sdk/client-dynamodb": "^3.454.0",
+    "@aws-sdk/lib-dynamodb": "^3.454.0",
+    "sharp": "^0.33.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1490.0"
+  },
+  "keywords": ["serverless", "aws", "lambda", "s3", "dynamodb", "analytics"],
+  "author": "Your Name",
+  "license": "MIT"
+}
