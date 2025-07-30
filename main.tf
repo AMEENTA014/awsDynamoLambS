@@ -115,56 +115,18 @@ resource "aws_iam_role_policy_attachment" "lambda_dynamodb_access" {
 }
 
 # Lambda Deployment Packages
-data "archive_file" "processor_lambda_zip" {
-  type        = "zip"
-  output_path = "processor_lambda.zip"
-  
-  source {
-    content  = file("${path.module}/processor_lambda.js")
-    filename = "processor_lambda.js"
-  }
-  
-  source {
-    content  = file("${path.module}/utils.js")
-    filename = "utils.js"
-  }
-  
-  source {
-    content  = file("${path.module}/package.json")
-    filename = "package.json"
-  }
-}
 
-data "archive_file" "query_lambda_zip" {
-  type        = "zip"
-  output_path = "query_lambda.zip"
-  
-  source {
-    content  = file("${path.module}/query_lambda.js")
-    filename = "query_lambda.js"
-  }
-  
-  source {
-    content  = file("${path.module}/utils.js")
-    filename = "utils.js"
-  }
-  
-  source {
-    content  = file("${path.module}/package.json")
-    filename = "package.json"
-  }
-}
 
 # Lambda Functions
 resource "aws_lambda_function" "processor_lambda" {
-  filename         = data.archive_file.processor_lambda_zip.output_path
+  filename         = "${path.module}/processor_lambda.zip"
   function_name    = var.lambda_processor_name
   role            = aws_iam_role.lambda_execution_role.arn
   handler         = "processor_lambda.handler"
   runtime         = "nodejs18.x"
   timeout         = 60
   memory_size     = 512
-  source_code_hash = data.archive_file.processor_lambda_zip.output_base64sha256
+  source_code_hash = filebase64sha256("${path.module}/processor_lambda.zip")
 
   environment {
     variables = {
@@ -181,14 +143,14 @@ resource "aws_lambda_function" "processor_lambda" {
 }
 
 resource "aws_lambda_function" "query_lambda" {
-  filename         = data.archive_file.query_lambda_zip.output_path
+  filename         = "${path.module}/query_lambda.zip"
   function_name    = var.lambda_query_name
   role            = aws_iam_role.lambda_execution_role.arn
   handler         = "query_lambda.handler"
   runtime         = "nodejs18.x"
   timeout         = 30
   memory_size     = 256
-  source_code_hash = data.archive_file.query_lambda_zip.output_base64sha256
+  source_code_hash = filebase64sha256("${path.module}/query_lambda.zip")
 
   environment {
     variables = {
